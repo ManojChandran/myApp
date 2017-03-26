@@ -1,6 +1,6 @@
-AWS Cognito
+# AWS Cognito
 
-This project is a login solution using Cognito Cloud Solution.
+This project is a login solution created with Angular 2 and AWS Cognito.
 
 # Amazon Cognito
 
