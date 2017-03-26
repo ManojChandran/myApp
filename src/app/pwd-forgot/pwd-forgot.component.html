@@ -1,0 +1,30 @@
+	<form [formGroup]="frgtPwdForm">
+		<div *ngIf="errorMessage!=null" class="alert alert-danger">{{ errorMessage }}</div>
+		<div class="form-group">
+			<label for="email">Email :</label>
+			<input formControlName="email" type="email" class="form-control">
+			<div *ngIf="formErrors.email" class="alert alert-danger">{{ formErrors.email }}
+			</div>
+		</div>
+		<div class="form-group" *ngIf="resetPwdActive!=null">	
+			<label for="pwd">New Password:</label>
+			<input formControlName="password" type="password" class="form-control">
+			<div *ngIf="formErrors.password" class="alert alert-danger">{{ formErrors.password }}
+			</div>
+		</div>
+		<div class="form-group" *ngIf="resetPwdActive!=null">
+			<label for="Name">Confirmation Code :</label>
+			<input formControlName="confCode" type="text" class="form-control">
+			<div *ngIf="formErrors.confCode" class="alert alert-danger">{{ formErrors.confCode }}
+			</div>
+		</div>		
+		<div class="btn-toolbar" role="toolbar">
+		   <div class="btn-group" role="group" *ngIf="frgtPwdActive!=null">
+		   		<button type="button" class="btn btn-secondary btn-sm" (click)="onNextForm()">Next</button>
+		   </div>
+		   <div class="btn-group" role="group" *ngIf="resetPwdActive!=null">
+		   		<button type="button" class="btn btn-secondary btn-sm" (click)="onSubmitForm()">Submit</button>
+		   </div>
+		</div>   
+	</form>
+

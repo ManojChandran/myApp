@@ -1,0 +1,47 @@
+	<form [formGroup]="authForm">
+		<div *ngIf="errorMessage!=null" class="alert alert-danger">{{ errorMessage }}</div>
+		<div class="form-group" *ngIf="signUpActive!=null && signInActive!=null">
+			<label for="Name">Player Name :</label>
+			<input formControlName="playerName" type="text" class="form-control">
+			<div *ngIf="formErrors.playerName" class="alert alert-danger">{{ formErrors.playerName }}
+			</div>
+		</div>
+		<div class="form-group" *ngIf="signInActive!=null">
+			<label for="email">Email :</label>
+			<input formControlName="email" type="email" class="form-control">
+			<div *ngIf="formErrors.email" class="alert alert-danger">{{ formErrors.email }}
+			</div>
+		</div>
+		<div class="form-group" *ngIf="signInActive!=null">	
+			<label for="pwd">Password:</label>
+			<input formControlName="password" type="password" class="form-control">
+			<div *ngIf="formErrors.password" class="alert alert-danger">{{ formErrors.password }}
+			</div>
+		</div>
+		<div class="form-group" *ngIf="actiVationOn!=null">
+			<label for="Name">Confirmation Code :</label>
+			<input formControlName="confCode" type="text" class="form-control">
+			<div *ngIf="formErrors.confCode" class="alert alert-danger">{{ formErrors.confCode }}
+			</div>
+		</div>		
+		<div class="btn-toolbar" role="toolbar">
+		   <div class="btn-group" role="group" *ngIf="signUpActive==null">
+		   		<button type="button" (click)="onSinginForm()" class="btn btn-secondary btn-sm">Sign In</button>
+		   </div>		   
+		   <div class="btn-group" role="group" *ngIf="signUpActive==null">
+		   		<button type="button" (click)="onNewPlayerForm()" class="btn btn-secondary btn-sm">New Player</button>
+		   </div>
+		   <div class="btn-group" role="group" *ngIf="actiVationOn==null && signUpActive!=null">
+		   		<button type="button" (click)="onAddPlayerForm()" class="btn btn-secondary btn-sm">Add Player</button>
+		   </div>
+		   <div class="btn-group" role="group" *ngIf="actiVationOn!=null">
+		   		<button type="button" (click)="onConfirmForm()" class="btn btn-secondary btn-sm">Confirmation Code</button>
+		   </div>
+		   <div class="btn-group" role="group" *ngIf="signUpActive!=null">
+		   		<button type="button" (click)="ngOnInit()" class="btn btn-secondary btn-sm">Cancel</button>
+		   </div>
+		</div>
+		<div *ngIf="signUpActive==null">
+			<p><a [routerLink]="['/frgtpwd']"> <i class="fa fa-fw fa-group"></i> Forgot Password</a></p>		
+		</div> 		  
+	</form>
