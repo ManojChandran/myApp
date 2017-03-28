@@ -12,6 +12,7 @@ import { AuthPwdComponent } from './auth-pwd/auth-pwd.component';
 import { AppHomeComponent } from './app-home/app-home.component';
 import { NavBarComponent, LogoutComponent } from './nav-bar/nav-bar.component';
 import { PwdForgotComponent } from './pwd-forgot/pwd-forgot.component';
+import { ValidateEmailDirective } from './shared/validate-email.directive';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PwdForgotComponent } from './pwd-forgot/pwd-forgot.component';
     AppHomeComponent,
     NavBarComponent,
     LogoutComponent,
-    PwdForgotComponent
+    PwdForgotComponent,
+    ValidateEmailDirective
   ],
   imports: [
     BrowserModule,

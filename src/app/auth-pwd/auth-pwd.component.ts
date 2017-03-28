@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import {Router} from "@angular/router";
 //import { CustomValidators } from '../shared/custom-validators';
 import { UserLoginService, UserRegistrationService, CognitoCallback, LoggedInCallback } from "../service/cognito.service";
+import { ValidateEmailDirective } from '../shared/validate-email.directive';
 
 export class RegistrationUser {
     name: string;
@@ -44,7 +45,10 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
                         Validators.maxLength(24)]),
 
    		email: this.formBuilder.control(null,[
-                        Validators.required]),
+                        Validators.required,
+                        Validators.minLength(4),
+                        Validators.maxLength(40),
+                        emailValidator(/bob/i)]),
 
    		password: this.formBuilder.control(null, [
                         Validators.required,
@@ -96,6 +100,8 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
       },
       'email': {
         'required':      'Email is required.',
+        'minlength':     'Email must be at least 4 characters long.',
+        'maxlength':     'Email cannot be more than 24 characters long.'        
       },
       'password': {
         'required':      'Password is required.',
@@ -103,9 +109,9 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
         'maxlength':     'Password cannot be more than 24 characters long.'
       },
       'confCode': {
-        'required':      'Password is required.',
-        'minlength':     'Password must be at least 8 characters long.',
-        'maxlength':     'Password cannot be more than 24 characters long.'
+        'required':      'Confirmation code required.',
+        'minlength':     'Confirmation code must be at least 8 characters long.',
+        'maxlength':     'Confirmation code cannot be more than 24 characters long.'
       }
 
   };
