@@ -3,7 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import {Router} from "@angular/router";
 //import { CustomValidators } from '../shared/custom-validators';
 import { UserLoginService, UserRegistrationService, CognitoCallback, LoggedInCallback } from "../service/cognito.service";
-import { ValidateEmailDirective } from '../shared/validate-email.directive';
+import { ValidateEmailDirective, emailValidator } from '../shared/validate-email.directive';
 
 export class RegistrationUser {
     name: string;
@@ -19,12 +19,12 @@ export class RegistrationUser {
 
 export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnInit {
   authForm: FormGroup;
-  signUpActive: string;
   signInActive: string;
+  signUpActive: string;
   actiVationOn: string;
-  forgotPwdOn : string;
   errorMessage: string;
   registrationUser: RegistrationUser;
+  reg: RegExp;
 
   constructor(public router: Router,
               private formBuilder: FormBuilder, 
@@ -47,8 +47,8 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
    		email: this.formBuilder.control(null,[
                         Validators.required,
                         Validators.minLength(4),
-                        Validators.maxLength(40),
-                        emailValidator(/bob/i)]),
+                        Validators.maxLength(40)]),
+//                        emailValidator(this.reg)]),
 
    		password: this.formBuilder.control(null, [
                         Validators.required,
@@ -57,8 +57,8 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
 
       confCode: this.formBuilder.control(null,[
                         Validators.required,
-                        Validators.minLength(5),
-                        Validators.maxLength(8)])
+                        Validators.minLength(6),
+                        Validators.maxLength(6)])
 
    });
 
@@ -100,18 +100,19 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
       },
       'email': {
         'required':      'Email is required.',
-        'minlength':     'Email must be at least 4 characters long.',
-        'maxlength':     'Email cannot be more than 24 characters long.'        
+//        'minlength':     'Email must be at least 4 characters long.',
+        'maxlength':     'Email cannot be more than 40 characters long.',
+        'validEmail':    'Email not valid'        
       },
       'password': {
         'required':      'Password is required.',
-        'minlength':     'Password must be at least 8 characters long.',
+        'minlength':     '8 characters long with a one special and numeric value .',
         'maxlength':     'Password cannot be more than 24 characters long.'
       },
       'confCode': {
         'required':      'Confirmation code required.',
-        'minlength':     'Confirmation code must be at least 8 characters long.',
-        'maxlength':     'Confirmation code cannot be more than 24 characters long.'
+        'minlength':     'Confirmation code must be at least 6 characters long.',
+        'maxlength':     'Confirmation code cannot be more than 6 characters long.'
       }
 
   };
@@ -120,10 +121,10 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
     this.signUpActive = null;
     this.actiVationOn = null;
     this.errorMessage = null;
-    this.errorMessage = null;
-    this.signInActive = "on";
+    this.signInActive = 'on';
     this.authForm.reset();
     this.registrationUser = new RegistrationUser();
+//    this.reg = new RegExp('[a-zA-Z0-9]*@[a-zA-Z]*.[a-zA-Z]{3}','i');
   }
 
   onResetForm(){
@@ -142,34 +143,39 @@ export class AuthPwdComponent implements CognitoCallback, LoggedInCallback, OnIn
 
   onNewPlayerForm(){
     this.signUpActive = 'on';
+    this.signInActive = null;
     console.log(this.authForm.value)
   }
 
 //Sign Up function
   onAddPlayerForm(){
-    this.actiVationOn = 'on';
-    this.signInActive = null;
+
     this.errorMessage = null;
     this.registrationUser.name = this.authForm.value.playerName;
     this.registrationUser.email = this.authForm.value.email;
     this.registrationUser.password = this.authForm.value.password;
     console.log(this.registrationUser);
     this.userRegistration.register(this.registrationUser, this);
+
   }  
 
 //Confirmation code
   onConfirmForm(){
     console.log(this.authForm.value.confCode);
     console.log(this.registrationUser.email);
-    this.regService.confirmRegistration(this.registrationUser.email, this.authForm.value.confCode, this);
+    this.registrationUser.email = this.authForm.value.email;
+    this.regService.confirmRegistration(this.authForm.value.email, this.authForm.value.confCode, this);
   }
 
   cognitoCallback(message: string, result: any) {
         if (message != null) { //error
             this.errorMessage = message;
-        } else { //success
-          console.log('success');
-          this.router.navigate(['/home']);
+        } else if (this.signUpActive == 'on'){
+             this.actiVationOn = 'on';
+             this.signUpActive = null;       
+        } else {
+              console.log('success');
+              this.router.navigate(['/home']);
         }
   }
   
