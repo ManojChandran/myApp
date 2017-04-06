@@ -83,9 +83,9 @@ export class PwdForgotComponent implements OnInit {
         'maxlength':     'Password cannot be more than 24 characters long.'
       },
       'confCode': {
-        'required':      'Password is required.',
-        'minlength':     'Password must be at least 8 characters long.',
-        'maxlength':     'Password cannot be more than 24 characters long.'
+        'required':      'Confirmation code required.',
+        'minlength':     'Confirmation code must be at least 6 characters long.',
+        'maxlength':     'Confirmation code cannot be more than 6 characters long.'
       }
 
   };
@@ -101,15 +101,14 @@ export class PwdForgotComponent implements OnInit {
   }
 
   cognitoCallback(message: string, result: any) {
-        if (message == null && result == null) { //error
-            if (this.frgtPwdActive == null){
-                this.router.navigate(['/auth']);
-            } else {
-             this.frgtPwdActive = null;
-             this.resetPwdActive = 'on';  
-            }
-        } else { //success
+        if (message != null) { //error
             this.errorMessage = message;
+        } else if (this.frgtPwdActive == 'on'){
+             this.frgtPwdActive = null;
+             this.resetPwdActive = 'on';                     
+        } else {
+              console.log('success');
+              this.router.navigate(['/home']);
         }
   }
 
